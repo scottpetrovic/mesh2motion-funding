@@ -3,6 +3,5 @@ import { defineConfig } from 'vite'
 import ssrPlugin from 'vite-ssr-components/plugin'
 
 export default defineConfig({
-  plugins: [cloudflare(), ssrPlugin()],
-  publicDir: 'public',
+  plugins: [cloudflare(), ssrPlugin()]
 })

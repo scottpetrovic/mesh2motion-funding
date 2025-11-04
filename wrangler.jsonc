@@ -3,5 +3,8 @@
   "name": "hono-learn",
   "compatibility_date": "2025-08-03",
   "main": "./server/api.tsx",
-  "compatibility_flags": ["nodejs_compat"] // fixes issue with Stripe API conflict "util" issue
+  "compatibility_flags": ["nodejs_compat"], // fixes issue with Stripe API conflict "util" issue
+  "assets": {
+    "directory": "./public"
+  }
 }

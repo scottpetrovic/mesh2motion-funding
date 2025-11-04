@@ -1,33 +1,11 @@
 import { Hono } from 'hono'
 import Stripe from 'stripe'
-import { createProduct } from './stripe-actions'
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2025-03-31.basil' } as any)
 
 const app = new Hono()
 
-// e.g. http://localhost:5173/api/books
-app.get('/api/books', (c) => {
-  return c.json([
-    { id: 1, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald' },
-    { id: 2, title: 'To Kill a Mockingbird', author: 'Harper Lee' },
-    { id: 3, title: '1984', author: 'George Orwell' }
-  ])
-})
-
 // stripe-related API calls
-app.post('/api/create-product', async (c) => {
-  try {
-    const result = await createProduct();
-    return c.json({ 
-      success: true,  
-      ...result
-    });
-  } catch (error) {
-    return c.json({ error: `Failed to create subscription: ${error}` }, 500);
-  }
-});
-
 app.post('/api/create-checkout-session', async (c: any) => {
 
   try {
@@ -64,11 +42,42 @@ app.post('/api/create-checkout-session', async (c: any) => {
 
 });
 
+// count of successful payments
+app.get('/api/successful-payments', async (c: any) => {
+  try {
+    // Create date for November 1, 2025
+    // about when the Stripe payments were set up
+    const novemberStart = new Date('2025-11-01T00:00:00Z');
+    const timestampSeconds = Math.floor(novemberStart.getTime() / 1000);
+
+    const paymentIntents = await stripe.paymentIntents.list({
+      created: { gte: timestampSeconds }, // Greater than or equal to November 1, 2025
+      limit: 1000 // Adjust as needed, max is 1000 per request
+    });
+
+    // Filter for only successful payments
+    const successfulPayments = paymentIntents.data.filter(
+      payment => payment.status === 'succeeded'
+    );
+
+    return c.json({
+      total_successful_payments: successfulPayments.length,
+      payments: successfulPayments.map(payment => ({
+        amount: payment.amount,
+        currency: payment.currency,
+      }))
+    });
+
+  } catch (error) {
+    return c.json({ error: `Failed to fetch payments: ${error}` }, 500);
+  }
+});
+
 function getCurrentBaseURL(context: any) {
-  // Alternative approach - dynamic URL based on request
-  const host = context.req.header('host') || 'localhost:5173';
-  const protocol = context.req.header('x-forwarded-proto') || 'http';
-  return `${protocol}://${host}`; 
+  const url = context.req.url;
+  const protocol = url.startsWith('https') ? 'https' : 'http';
+  const base_domain = url.split('://')[1].split('/')[0];
+  return `${protocol}://${base_domain}`;
 }
 
 

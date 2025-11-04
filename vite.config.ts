@@ -3,5 +3,15 @@ import { defineConfig } from 'vite'
 import ssrPlugin from 'vite-ssr-components/plugin'
 
 export default defineConfig({
-  plugins: [cloudflare(), ssrPlugin()]
+  plugins: [cloudflare(), ssrPlugin()],
+  build: {
+    lib: {
+      entry: './server/api.tsx',
+      formats: ['es'],
+      fileName: 'index'
+    },
+    rollupOptions: {
+      external: ['hono', 'stripe']
+    }
+  }
 })

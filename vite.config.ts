@@ -9,9 +9,6 @@ export default defineConfig({
       entry: './server/api.tsx',
       formats: ['es'],
       fileName: 'index'
-    },
-    rollupOptions: {
-      external: ['hono', 'stripe']
     }
   }
 })

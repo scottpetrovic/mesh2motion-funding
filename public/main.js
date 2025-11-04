@@ -16,7 +16,6 @@ async function loadStripeEmbeddedWidget() {
       .then((response) => response.json())
       .then((json) => json.checkoutSessionClientSecret);
 
-      console.log('Starting checkout with client secret: ', clientSecret);
       const checkout = await stripe.initEmbeddedCheckout({
         clientSecret: clientSecret
       });
@@ -31,7 +30,6 @@ async function loadSuccessfulPayments() {
   fetch('/api/successful-payments')
     .then(response => response.json())
     .then(data => {
-      console.log('Total successful payments:', data.total_successful_payments);
 
       // You can update the UI with this data as needed
       const successfulPaymentsCount = document.getElementById('successful-payments-count');

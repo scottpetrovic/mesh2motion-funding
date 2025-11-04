@@ -1,10 +1,13 @@
-* {
-    font-family: Arial, Helvetica, sans-serif;
-}
-
 #checkout-container {
     border: 1px solid #d0d0d0;
     width: fit-content;
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 14px;
+    background: white;
+    box-shadow: 4px 1px 20px 0px #1b1567;
+}
+
+/* overriding some default shared styles */
+section {
+    max-width: 100rem;
 }

@@ -1,12 +1,24 @@
 import { Hono } from 'hono'
 import Stripe from 'stripe'
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2025-03-31.basil' } as any)
+// Cloudflare thing that will provide environment bindings (API key text substitution)
+type Bindings = {
+  STRIPE_SECRET_KEY: string,
+  STRIPE_PUBLISHABLE_KEY: string
+}
 
-const app = new Hono()
+const app = new Hono<{ Bindings: Bindings }>()
+
+
+app.get('/api/config', async (c) => {
+  return c.json({
+    stripePublishableKey: c.env.STRIPE_PUBLISHABLE_KEY
+  })
+})
 
 // stripe-related API calls
 app.post('/api/create-checkout-session', async (c: any) => {
+  const stripe = new Stripe(c.env.STRIPE_SECRET_KEY, { apiVersion: '2025-03-31.basil' } as any)
 
   try {
 
@@ -37,13 +49,12 @@ app.post('/api/create-checkout-session', async (c: any) => {
   catch(error) {
     return c.json({ error: `Failed to create checkout session: ${error}` }, 500);
   };
-
-
-
 });
 
 // count of successful payments
 app.get('/api/successful-payments', async (c: any) => {
+  const stripe = new Stripe(c.env.STRIPE_SECRET_KEY, { apiVersion: '2025-03-31.basil' } as any)
+
   try {
     // Create date for November 1, 2025
     // about when the Stripe payments were set up

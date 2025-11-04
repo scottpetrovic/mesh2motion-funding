@@ -1,7 +1,15 @@
 // publishable key for Stripe
 // it is ok if people see this key when the site is built
 // it is a variable to help when switching between test and live environments for Stripe
-const stripe = Stripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
+// Initialize Stripe with key from API
+let stripe;
+async function initStripe() {
+  const config = await fetch('/api/config').then(r => r.json());
+  stripe = Stripe(config.stripePublishableKey);
+}
+initStripe();
+
 
 document.addEventListener('DOMContentLoaded', () => {
     loadStripeEmbeddedWidget();

@@ -43,7 +43,7 @@
                 <section id="hero-donation">
 
                     <!-- left column -->
-                    <span style="max-width: 45rem; margin: auto;">
+                    <span style="max-width: 45rem; margin: 2rem auto;">
 
                         <!-- top row with header and tip button-->
                         <div style="display: flex; flex-direction: row; gap: 1rem; justify-content: space-evenly; align-items: center;">
@@ -51,9 +51,10 @@
 
                             <div style="margin: 1rem 0; flex-direction: column; display: flex; text-align: center; gap: 0.5rem;">
                                 <div>
-                                    <span id="select-tip-step">
-                                        <input type="text" id="tip-amount" placeholder="Enter your tip amount" value="10" />
-                                        <button class="primary-button" id="tip_button">Tip</button>
+                                    <span id="select-tip-step" style="display: flex; gap: 0">
+                                        <span id="currency-symbol">$</span>
+                                        <input type="text" id="tip-amount" placeholder="10" value="10" />
+                                        <button class="primary-button" id="tip_button" style="border-radius: 0;">Tip</button>
                                     </span>
                                     <span id="reload-step" style="display: none;">
                                         <!-- once the stripe widget is created, it cannot be destroyedad remade -->

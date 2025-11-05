@@ -21,6 +21,7 @@ input {
     border: none;
     text-align: center;
     width: 10rem;
+    border-radius: 0;
 }
 
 /* overriding some default shared styles */
@@ -60,6 +61,15 @@ section span {
     font-size: 1.2rem;
 }
 
+#currency-symbol {
+    display: flex;
+    align-items: center;
+    color: #424242;
+    position: relative;
+    left: 1.5em;
+    font-size: 1.3rem;
+}
+
 table {
     border: 1px solid #9e7caf;
     padding: 2rem;
@@ -76,4 +86,26 @@ td {
 
 footer {
     margin-top: 0;
+}
+
+/* Thank you page */
+#thank-you-container {
+    flex-direction: column;
+    max-width: 38rem;
+    border: 1px solid white;
+    border-radius: 0.5rem;
+    margin-bottom: 7rem;
+    margin-top: 8rem;
+}
+#thank-you-container h1 {
+    transform: none;
+    margin-top: 0;
+}
+
+#session-id {
+    padding: 1rem;
+    word-break: break-all;
+    background: #2c1839;
+    border: 1px solid #5b5b5b;
+    margin-bottom: 2rem;
 }

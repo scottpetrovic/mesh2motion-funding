@@ -8,35 +8,41 @@ async function initStripe() {
   const config = await fetch('/api/config').then(r => r.json());
   stripe = Stripe(config.stripePublishableKey);
 }
-initStripe();
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await initStripe();
     loadStripeEmbeddedWidget(23400);
     loadSuccessfulPayments();
 })
 
-// test payment card info
-// successful payment card:  4242 4242 4242 4242
-
-async function loadStripeEmbeddedWidget(amount = 1000) {
-    const clientSecret = await fetch('/api/create-checkout-session', {
+const fetchClientSecret = async (amount) => {
+  return await fetch('/api/create-checkout-session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ amount })
     })
     .then((response) => response.json())
     .then((json) => json.checkoutSessionClientSecret);
+};
 
+
+
+// test payment card info
+// successful payment card:  4242 4242 4242 4242
+
+async function loadStripeEmbeddedWidget(amount = 10000) {
 
     const checkout = await stripe.initEmbeddedCheckout({
-      clientSecret: clientSecret
+      fetchClientSecret: () => fetchClientSecret(amount)
     });
 
     const checkoutContainer = document.getElementById('checkout-container');
     checkoutContainer.innerHTML = ''; // Clear previous content
     checkout.mount('#checkout-container');
 }
+
+
 
 async function loadSuccessfulPayments() {
 

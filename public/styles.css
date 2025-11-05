@@ -18,3 +18,7 @@ section {
     padding: 1.2rem 1rem;
     border-radius: 0;
 }
+
+.tip-metrics-container span {
+    font-size: 1.7rem;
+}

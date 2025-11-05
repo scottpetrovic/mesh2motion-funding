@@ -19,7 +19,8 @@ app.get('/api/config', async (c) => {
 // stripe-related API calls
 app.post('/api/create-checkout-session', async (c: any) => {
   const stripe = new Stripe(c.env.STRIPE_SECRET_KEY, { apiVersion: '2025-03-31.basil' } as any)
-
+  const { amount } = await c.req.json(); // Get amount from request body
+  
   try {
 
     // Stripe needs a fully qualified return URL
@@ -34,7 +35,7 @@ app.post('/api/create-checkout-session', async (c: any) => {
             product_data: {
               name: 'Custom amount',
             },
-            unit_amount: 1000,
+            unit_amount: amount,
           },
           quantity: 1,
         },
